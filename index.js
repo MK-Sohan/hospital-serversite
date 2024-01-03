@@ -38,6 +38,8 @@ async function run() {
     const noneAcAmbulance = client
       .db("allambulance")
       .collection("noneacambulance");
+    const allMedicine = client.db("allmedicine").collection("medicines");
+    const cartCollection = client.db("allCartData").collection("cartData");
 
     // ----------- collections end-------------------
 
@@ -75,6 +77,36 @@ async function run() {
       const query = {};
       const cursor = noneAcAmbulance.find(query);
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/allmedicine", async (req, res) => {
+      const query = {};
+      const cursor = allMedicine.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    //  get cart data
+
+    app.get("/cartallproducts", async (req, res) => {
+      const query = {};
+      const cursor = cartCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // ------- add to cart api --------
+    app.put("/cart/:id", async (req, res) => {
+      const id = req.params.id;
+      const cartProduct = req.body;
+      const filter = { _id: id };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: cartProduct,
+      };
+      const result = await cartCollection.updateOne(filter, updateDoc, options);
+      // const cart = req.body;
+      // const result = await cartCollection.insertOne(cart);
       res.send(result);
     });
     // ----------- apis end-------------------
