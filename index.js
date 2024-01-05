@@ -38,6 +38,7 @@ async function run() {
       .collection("noneacambulance");
     const allMedicine = client.db("allmedicine").collection("medicines");
     const cartCollection = client.db("allCartData").collection("cartData");
+    const userCollection = client.db("allUsersData").collection("allUsers");
 
     // ----------- collections end-------------------
 
@@ -127,6 +128,24 @@ async function run() {
       res.send(result);
     });
 
+    //  user add to the database api
+
+    app.put("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: user,
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
+    app.get("/alluser", async (req, res) => {
+      const query = {};
+      const result = await userCollection.find(query).toArray();
+      res.send(result);
+    });
     // ----------- apis end-------------------
   } finally {
   }
