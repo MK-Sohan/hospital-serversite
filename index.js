@@ -98,6 +98,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.get("/cartallproducts/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const cursor = cartCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     // ------- add to cart api --------
     app.put("/cart/:id", async (req, res) => {
