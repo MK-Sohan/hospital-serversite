@@ -39,6 +39,9 @@ async function run() {
     const allMedicine = client.db("allmedicine").collection("medicines");
     const cartCollection = client.db("allCartData").collection("cartData");
     const userCollection = client.db("allUsersData").collection("allUsers");
+    const appointmentCollection = client
+      .db("allclientappointments")
+      .collection("appointments");
 
     // ----------- collections end-------------------
 
@@ -144,6 +147,19 @@ async function run() {
     app.get("/alluser", async (req, res) => {
       const query = {};
       const result = await userCollection.find(query).toArray();
+      res.send(result);
+    });
+    // add appointment
+    app.post("/addappointment", async (req, res) => {
+      const product = req.body;
+      const result = await appointmentCollection.insertOne(product);
+      res.send(result);
+    });
+    app.get("/myappointment/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const cursor = appointmentCollection.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     });
     // ----------- apis end-------------------
