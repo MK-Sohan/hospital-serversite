@@ -168,29 +168,30 @@ async function run() {
     // making an user admin api-------------
     app.put("/user/admin/:email", varifyJwt, async (req, res) => {
       const email = req.params.email;
-      const requester = req.decoded.email;
+      const requester = req.decoded?.email;
       const requesterAccount = await userCollection.findOne({
         email: requester,
       });
-      if (requesterAccount.role === "admin") {
+      console.log(requesterAccount);
+      if (requesterAccount?.role === "admin") {
         const filter = { email: email };
 
         const updateDoc = {
           $set: { role: "admin" },
         };
         const result = await userCollection.updateOne(filter, updateDoc);
-
         res.send(result);
       } else {
         res.status(403).send({ message: "Forbidden Accrss" });
       }
     });
-    app.get("/admin/:email", varifyJwt, async (req, res) => {
+    app.get("/admin/:email", async (req, res) => {
       const email = req.params.email;
-      const user = await userCollection.findOne({ email: email });
-      const isAdmin = user.role === "admin";
-      console.log(isAdmin);
-      res.send({ admin: isAdmin });
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      const isAdmin = user?.role === "admin";
+      // console.log(isAdmin);
+      res.send(isAdmin);
     });
 
     app.get("/alluser", async (req, res) => {
