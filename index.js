@@ -56,6 +56,10 @@ async function run() {
     const allMedicine = client.db("allmedicine").collection("medicines");
     const cartCollection = client.db("allCartData").collection("cartData");
     const userCollection = client.db("allUsersData").collection("allUsers");
+    const allOrdersCollection = client
+      .db("allcustomerOrders")
+      .collection("customerOrders");
+
     const appointmentCollection = client
       .db("allclientappointments")
       .collection("appointments");
@@ -148,6 +152,19 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/allcustomerorders", varifyJwt, async (req, res) => {
+      const orders = req.body;
+      console.log("orders", orders);
+      const result = await allOrdersCollection.insertOne(orders);
+      res.send(result);
+    });
+    app.get("/deliverallorders", varifyJwt, async (req, res) => {
+      const query = {};
+      const cursor = allOrdersCollection.find(query);
+      console.log(cursor);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     //  user add to the database api
 
     app.put("/user/:email", async (req, res) => {
@@ -199,10 +216,29 @@ async function run() {
       const result = await userCollection.find(query).toArray();
       res.send(result);
     });
+
+    // app.delete("/delete-user/:email", async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const result = await userCollection.deleteOne(query);
+    //   res.send(result);
+    // });
+    app.delete("/deleteuser/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    });
     // add appointment
     app.post("/addappointment", async (req, res) => {
       const product = req.body;
       const result = await appointmentCollection.insertOne(product);
+      res.send(result);
+    });
+    app.get("/allappointments", async (req, res) => {
+      const query = {};
+      const cursor = appointmentCollection.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     });
     app.get("/myappointment/:email", async (req, res) => {
@@ -212,13 +248,6 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    // app.delete("/myappointment/:e", async (req, res) => {
-    //   const email = req.params.e;
-    //   const query = { email: email };
-    //   const result = appointmentCollection.deleteOne(query);
-    //   // const result = await cursor.toArray();
-    //   res.send(result);
-    // });
     app.delete("/deletemyappointment/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id);
