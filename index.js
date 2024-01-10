@@ -115,6 +115,35 @@ async function run() {
       const result = await allMedicine.findOne(query);
       res.send(result);
     });
+
+    //  add medicine
+    app.post("/addmedicine", varifyJwt, async (req, res) => {
+      const medicine = req.body;
+      console.log("newuser", medicine);
+      const result = await allMedicine.insertOne(medicine);
+      //   res.send({ result: "successme" });
+      res.send(result);
+    });
+    // app.put("/addmedicine/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const medicine = req.body;
+    //   const filter = { _id: id };
+    //   const options = { upsert: true };
+    //   const updateDoc = {
+    //     $set: medicine,
+    //   };
+    //   const result = await allMedicine.updateOne(filter, updateDoc, options);
+    //   // const cart = req.body;
+    //   // const result = await cartCollection.insertOne(cart);
+    //   res.send(result);
+    // });
+
+    app.delete("/medicineDelete/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await allMedicine.deleteOne(query);
+      res.send(result);
+    });
     //  get cart data
 
     app.get("/cartallproducts", async (req, res) => {
@@ -165,6 +194,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.delete("/customerOrderdelete/:id", varifyJwt, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await allOrdersCollection.deleteOne(query);
+      res.send(result);
+    });
+
     //  user add to the database api
 
     app.put("/user/:email", async (req, res) => {
