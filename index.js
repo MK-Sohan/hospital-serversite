@@ -90,6 +90,23 @@ async function run() {
       res.send(result);
     });
 
+    // add doctor api----------
+    app.post("/addDoctor", varifyJwt, async (req, res) => {
+      const doctor = req.body;
+      console.log("doctor", doctor);
+      const result = await allDoctors.insertOne(doctor);
+      //   res.send({ result: "successme" });
+      res.send(result);
+    });
+    //  delete doctor api-------
+
+    app.delete("/DoctorDelete/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await allDoctors.deleteOne(query);
+      res.send(result);
+    });
+
     app.get("/allAmbulance", async (req, res) => {
       const query = {};
       const cursor = allAmbulance.find(query);
