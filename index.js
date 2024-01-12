@@ -56,6 +56,10 @@ async function run() {
     const allMedicine = client.db("allmedicine").collection("medicines");
     const cartCollection = client.db("allCartData").collection("cartData");
     const userCollection = client.db("allUsersData").collection("allUsers");
+    const blooddonorCollection = client
+      .db("allBlooddonor")
+      .collection("blooddonor");
+
     const allOrdersCollection = client
       .db("allcustomerOrders")
       .collection("customerOrders");
@@ -90,6 +94,21 @@ async function run() {
       res.send(result);
     });
 
+    // blood donor api
+
+    app.get("/bloodDonor", async (req, res) => {
+      const query = {};
+      const cursor = blooddonorCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.post("/addbloodDonor", varifyJwt, async (req, res) => {
+      const donor = req.body;
+      console.log("donor", donor);
+      const result = await blooddonorCollection.insertOne(donor);
+      //   res.send({ result: "successme" });
+      res.send(result);
+    });
     // add doctor api----------
     app.post("/addDoctor", varifyJwt, async (req, res) => {
       const doctor = req.body;
