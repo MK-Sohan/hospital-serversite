@@ -104,7 +104,7 @@ async function run() {
     });
     app.post("/addbloodDonor", varifyJwt, async (req, res) => {
       const donor = req.body;
-      console.log("donor", donor);
+      // console.log("donor", donor);
       const result = await blooddonorCollection.insertOne(donor);
       //   res.send({ result: "successme" });
       res.send(result);
@@ -112,7 +112,7 @@ async function run() {
     // add doctor api----------
     app.post("/addDoctor", varifyJwt, async (req, res) => {
       const doctor = req.body;
-      console.log("doctor", doctor);
+      // console.log("doctor", doctor);
       const result = await allDoctors.insertOne(doctor);
       //   res.send({ result: "successme" });
       res.send(result);
@@ -155,7 +155,7 @@ async function run() {
     //  add medicine
     app.post("/addmedicine", varifyJwt, async (req, res) => {
       const medicine = req.body;
-      console.log("newuser", medicine);
+      // console.log("newuser", medicine);
       const result = await allMedicine.insertOne(medicine);
       //   res.send({ result: "successme" });
       res.send(result);
@@ -219,14 +219,14 @@ async function run() {
 
     app.post("/allcustomerorders", varifyJwt, async (req, res) => {
       const orders = req.body;
-      console.log("orders", orders);
+      // console.log("orders", orders);
       const result = await allOrdersCollection.insertOne(orders);
       res.send(result);
     });
     app.get("/deliverallorders", varifyJwt, async (req, res) => {
       const query = {};
       const cursor = allOrdersCollection.find(query);
-      console.log(cursor);
+      // console.log(cursor);
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -261,7 +261,7 @@ async function run() {
       const requesterAccount = await userCollection.findOne({
         email: requester,
       });
-      console.log(requesterAccount);
+      // console.log(requesterAccount);
       if (requesterAccount?.role === "admin") {
         const filter = { email: email };
 
@@ -322,7 +322,7 @@ async function run() {
     });
     app.delete("/deletemyappointment/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+      // console.log(id);
       const query = { _id: new ObjectId(id) };
       const result = await appointmentCollection.deleteOne(query);
       res.send(result);
