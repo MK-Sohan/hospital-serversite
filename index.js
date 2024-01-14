@@ -109,6 +109,14 @@ async function run() {
       //   res.send({ result: "successme" });
       res.send(result);
     });
+    // delete donor
+    app.delete("/donorDelete/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await blooddonorCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // add doctor api----------
     app.post("/addDoctor", varifyJwt, async (req, res) => {
       const doctor = req.body;
