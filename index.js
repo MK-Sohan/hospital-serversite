@@ -42,7 +42,7 @@ function varifyJwt(req, res, next) {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     // ----------- collections -------------------
     // const collection = client.db("allmedicen").collection("medicen");
@@ -231,7 +231,7 @@ async function run() {
       const result = await allOrdersCollection.insertOne(orders);
       res.send(result);
     });
-    app.get("/deliverallorders", varifyJwt, async (req, res) => {
+    app.get("/deliver-all-orders", async (req, res) => {
       const query = {};
       const cursor = allOrdersCollection.find(query);
       // console.log(cursor);
