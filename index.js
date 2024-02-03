@@ -238,7 +238,7 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    app.delete("/customerOrderdelete/:id", varifyJwt, async (req, res) => {
+    app.delete("/customerOrderdelete/:id", varifyJwt, async (req, res) => {                                                                             
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await allOrdersCollection.deleteOne(query);
